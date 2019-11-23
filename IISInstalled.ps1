@@ -1,12 +1,11 @@
 $TxtPath = "InsertPathHere"
 $File = Import-Csv $TxtPath
 $Computers = $File.Computers
-
+$i = 0
 foreach($Computer in $Computers)
 {
     Enter-PSSession -ComputerName $Computer
     $Service = Get-Service -ComputerName $Computer w3svc -ErrorAction SilentlyContinue
-    $i = 0
     $obj = new-object psobject -Property @{
         ComputerName = $Computer
     }
@@ -16,12 +15,12 @@ foreach($Computer in $Computers)
     }
     elseif($i -eq 0)
     {
-        $obj | Export-Csv -Path IISNotInstalled.csv
+        $obj | Export-Csv -Path '(get-date -f yyyy-MM-dd)IISNotInstalled.csv'
         $i++
     }
     else
     {
-        $obj | Export-Csv -Path IISNotInstalled.csv -Append
+        $obj | Export-Csv -Path '(get-date -f yyyy-MM-dd)IISNotInstalled.csv' -Append
         $i++
     }
     Exit-PSSession
